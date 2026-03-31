@@ -32,6 +32,7 @@ public class PensionReportService {
 
     return employeeRepository.findAll().stream()
         .filter(employee -> employee.pensionPlan() == null)
+        .filter(employee -> employee.yearlySalary().compareTo(new java.math.BigDecimal("100000.00")) >= 0)
         .filter(employee -> {
           LocalDate anniversary = employee.employmentDate().plusYears(3);
           return !anniversary.isBefore(nextQuarterStart) && !anniversary.isAfter(nextQuarterEnd);
