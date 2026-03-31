@@ -25,6 +25,7 @@ public class PensionCliApp {
 
         if (args.length == 0) {
             printJson(service.getAllEmployees());
+            printJson(service.getQuarterlyUpcomingEnrollees());
             return;
         }
 
