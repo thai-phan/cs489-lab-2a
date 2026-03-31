@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PensionReportServiceTest {
 
@@ -24,14 +25,14 @@ class PensionReportServiceTest {
 
         List<Employee> employees = service.getAllEmployees();
 
-        assertEquals(List.of("Carly", "Benard", "Daniel", "Yosef", "Anna", "May", "Wesley", "Maya", "Liam"),
+        assertEquals(List.of("Carly", "Benard", "May", "Daniel", "Robert", "Yosef", "Maya", "Anna", "Wesley", "Liam"),
                 employees.stream().map(Employee::firstName).toList());
         assertNotNull(employees.getFirst().pensionPlan());
         assertEquals("SM2307", employees.getFirst().pensionPlan().planReferenceNumber());
     }
 
     @Test
-    void upcomingEnrolleesIncludeTheNewlySeededEmployeeForSeededCurrentDate() {
+    void upcomingEnrolleesIncludeEmployeesWhoseThirdAnniversaryFallsInNextQuarter() {
         PensionReportService service = new PensionReportService(
                 new InMemoryEmployeeRepository(),
                 Clock.fixed(Instant.parse("2026-03-31T00:00:00Z"), ZoneOffset.UTC)
@@ -40,7 +41,7 @@ class PensionReportServiceTest {
         List<Employee> employees = service.getQuarterlyUpcomingEnrollees();
 
         assertEquals(2, employees.size());
-        assertEquals(List.of("May", "Maya"), employees.stream().map(Employee::firstName).toList());
+        assertEquals(List.of("Robert", "May"), employees.stream().map(Employee::firstName).toList());
     }
 
     @Test
@@ -52,8 +53,7 @@ class PensionReportServiceTest {
 
         List<Employee> employees = service.getQuarterlyUpcomingEnrollees();
 
-        assertEquals(1, employees.size());
-        assertEquals("Anna", employees.getFirst().firstName());
+        assertTrue(employees.isEmpty());
     }
 
     @Test
